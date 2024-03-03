@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TodoItem from "./../models/ToDo";
+import TodoItem from "../model";
 import { v4 as uuidv4 } from 'uuid';
 uuidv4();
 
