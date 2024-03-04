@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TodoItem from "../model";
 import { v4 as uuidv4 } from 'uuid';
+import  axios from "axios";
 uuidv4();
 
 interface TodoFormProps {
@@ -11,7 +12,7 @@ interface TodoFormProps {
 const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
   const [text, setText] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (text.trim()) {
       setText('');
@@ -23,8 +24,19 @@ const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
         createdAt: new Date(),
         isEditing: false
       };
+    const apiEndpoint = process.env.ENDPOINT || '';
 
-      addTodo(todoItem);
+    
+    await axios.put(`https://zg312eh1zj.execute-api.eu-central-1.amazonaws.com/todos`, todoItem, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    //  axios.post(apiEndpoint, todoItem).then(() => {
+    //   console.log(apiEndpoint)
+    //   addTodo(todoItem);
+    // })
     }
   };
 
