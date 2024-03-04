@@ -24,19 +24,19 @@ const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
         createdAt: new Date(),
         isEditing: false
       };
-    const apiEndpoint = process.env.ENDPOINT || '';
 
-    
-    await axios.put(`https://zg312eh1zj.execute-api.eu-central-1.amazonaws.com/todos`, todoItem, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    //  axios.post(apiEndpoint, todoItem).then(() => {
-    //   console.log(apiEndpoint)
-    //   addTodo(todoItem);
-    // })
+      await axios.put(process.env.REACT_APP_ENDPOINT_URL as string, todoItem, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        console.log('Response:', response.data);
+        addTodo(todoItem)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     }
   };
 
@@ -59,3 +59,8 @@ const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
 };
 
 export default TodoForm;
+
+
+
+
+
