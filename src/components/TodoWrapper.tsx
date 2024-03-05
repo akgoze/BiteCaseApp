@@ -1,13 +1,25 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import TodoForm from './TodoForm'
 import EditTodoForm from './EditTodoForm'
 import Todo from './Todo'
 import TodoItem from "../model";
+import axios from 'axios';
 
 
 export const TodoWrapper: React.FC = () => {
 
   const [todos, setTodos] = useState<TodoItem[]>([])
+
+  useEffect(() => {
+    const fecthTodos = async () => {
+      try {
+        const respone = await axios.get(process.env.REACT_APP_ENDPOINT_URL as string);
+        setTodos(respone.data)
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    fecthTodos()}, [])
 
   const addTodo = (todoItem: TodoItem) => {
     
@@ -31,7 +43,15 @@ export const TodoWrapper: React.FC = () => {
     setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing} : todo))
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
+    try {
+        const response = await axios.delete(`${process.env.REACT_APP_ENDPOINT_URL}/${id}`);
+        console.log('Todo deleted successfully:', response.data);
+        // You may want to update your local state or UI after successful deletion
+    } catch (error) {
+        console.error('Error deleting todo:', error);
+    }
+
     setTodos(
       todos.map(
         todo => todo?.id === id 
@@ -66,3 +86,4 @@ export const TodoWrapper: React.FC = () => {
     </div>
   )
 }
+
